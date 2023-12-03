@@ -1,0 +1,208 @@
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faCheck } from "@fortawesome/free-solid-svg-icons";
+
+import "./App.css";
+import {
+  useTable,
+  useFilters,
+  useGlobalFilter,
+  useAsyncDebounce,
+} from "react-table";
+
+function App() {
+  const [count, setCount] = useState(0);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dataPerPage, setDataPerPage] = useState(10);
+  const [searchValue, setSearchValue] = useState("");
+
+  const [data, setData] = useState([]);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      paginate(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(data.length / dataPerPage)) {
+      paginate(currentPage + 1);
+    }
+  };
+
+  // const searchFilter = (rows) => {
+    
+  // };
+
+  // const handleSelectAll = (event) => {
+  //   const { checked } = event.target;
+  //   if (checked) {
+  //     const newSelected = data.map((item) => item.id);
+  //     setSelectedItems(newSelected);
+  //   } else {
+  //     setSelectedItems([]);
+  //   }
+  // };
+
+  // const handleSelect = (event, id) => {
+  //   const selectedIndex = selectedItems.indexOf(id);
+  //   let newSelectedItems = [];
+
+  //   if (selectedIndex === -1) {
+  //     newSelectedItems = newSelectedItems.concat(selectedItems, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelectedItems = newSelectedItems.concat(selectedItems.slice(1));
+  //   } else if (selectedIndex === selectedItems.length - 1) {
+  //     newSelectedItems = newSelectedItems.concat(selectedItems.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelectedItems = newSelectedItems.concat(
+  //       selectedItems.slice(0, selectedIndex),
+  //       selectedItems.slice(selectedIndex + 1)
+  //     );
+  //   }
+
+  //   setSelectedItems(newSelectedItems);
+  // };
+
+  const handleDelete = () => {
+    // delete the selected items from the data
+  };
+
+  // columns
+  const COLUMNS = [
+    {
+      Header: "ID",
+      accessor: "id",
+    },
+    {
+      Header: "Name",
+      accessor: "name",
+    },
+    {
+      Header: "Email",
+      accessor: "email",
+    },
+    {
+      Header: "Role",
+      accessor: "role",
+    },
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
+        );
+        setData(response.data);
+      } catch (error) {
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  let indexOfLastData = currentPage * dataPerPage;
+  let indexOfFirstData = indexOfLastData - dataPerPage;
+  let currentData;
+
+  useEffect(() => {
+    currentData = data.slice(indexOfFirstData, indexOfLastData);
+  }, [data]);
+
+  const columns = useMemo(() => COLUMNS, []);
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    setGlobalFilter, // For global filtering
+  } = useTable(
+    {
+      columns,
+      currentData,
+    },
+    useFilters, // Add this hook for filtering
+    useGlobalFilter // Add this hook for global filtering
+  );
+  return (
+    <div className="main_app">
+      <div className="search">
+        <input type="text" placeholder="Search..." />
+        <button>Search</button>
+      </div>
+      {currentData ? (
+        <>
+          <button className="delete_button" onClick={handleDelete}>
+            Delete selected items
+            <FontAwesomeIcon icon={faCheck} />
+          </button>
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  <th className="checkbox_field">
+                    <input type="checkbox" onChange={handleSelectAll} />
+                  </th>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                    </th>
+                  ))}
+                  <th></th>
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row, index) => {
+                prepareRow(row);
+                return (
+                  <tr>
+                    <td className="checkbox_field">
+                      <input
+                        type="checkbox"
+                        // checked={selectedItems.includes(item.id)}
+                        onChange={(event) => handleSelect(event, item.id)}
+                      />
+                    </td>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                    <td>
+                        <FontAwesomeIcon icon={faTrash} className="trash" onClick={handleDelete}/>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </>
+      ) : (
+        <span>Loading...</span>
+      )}
+
+      <div className="pagination">
+        <button onClick={handlePrevPage}>Prev</button>
+        {[...Array(Math.ceil(data.length / dataPerPage))].map((_, i) => (
+          <button key={i} onClick={() => paginate(i + 1)}>
+            {i + 1}
+          </button>
+        ))}
+        <button onClick={handleNextPage}>Next</button>
+      </div>
+    </div>
+  );
+}
+
+export default App;

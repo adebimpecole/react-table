@@ -1,0 +1,284 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+.App {
+  padding: 2rem 5rem;
+}
+
+input {
+  height: 2.5rem;
+  width: 30%;
+  background: white;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 1rem;
+  box-sizing: border-box;
+  color: black;
+}
+
+button {
+  height: 2.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: 20%;
+}
+
+.search_box div {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  border-radius: 5px;
+  flex: 1;
+}
+.search_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.search,
+.trash_top {
+  background: #2196f3;
+  color: white;
+  height: 1.3rem;
+  padding: 0.7rem;
+  box-sizing: border-box;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background: #3199f3be;
+  }
+}
+.trash_top {
+  float: right;
+  position: relative;
+  right: 0;
+}
+
+.back,
+.last,
+.first,
+.next,
+.page_numbers {
+  width: 1.3rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid rgba(128, 128, 128, 0.192);
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.back,
+.last,
+.first,
+.next {
+  background: #3197f3;
+  color: white;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: #3199f3be;
+  }
+}
+
+.page_numbers {
+  font-size: 0.85rem;
+  font-weight: 500;
+  width: 1.6rem;
+  padding: 0.3rem 0.5rem;
+  text-align: center;
+}
+
+.page_div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  margin: 2rem 0;
+  border-collapse: collapse;
+}
+
+input[type="checkbox"] {
+  background: white;
+  background-color: white;
+  border: 1px solid rgba(128, 128, 128, 0.272);
+  border-radius: 3px;
+  margin: 0;
+  width: 0.9rem;
+}
+
+tr > td {
+  font-size: 0.9rem;
+  height: 2.5rem;
+  line-height: 0.5rem;
+}
+
+th {
+  font-size: 0.9rem;
+  font-weight: 500;
+  height: 3rem;
+  line-height: 1rem;
+  background: #f7f7f8;
+  text-transform: capitalize;
+  color: #727381;
+}
+
+thead > tr > :nth-child(1) {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background: #f7f7f8;
+}
+
+thead > tr > :last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+tr > :nth-child(1) {
+  width: 6rem;
+  text-align: center;
+}
+
+tr > :nth-child(2) {
+  width: 6rem;
+  text-align: center;
+}
+
+tr > :nth-child(3) {
+  width: 19rem;
+  padding-left: 2rem;
+  text-align: left;
+}
+
+tr > :nth-child(4) {
+  width: 17rem;
+  padding-left: 2rem;
+  text-align: left;
+}
+
+tr > :nth-child(5) {
+  width: 9rem;
+  padding-left: 2rem;
+  text-align: left;
+  text-transform: capitalize;
+}
+
+tr > :nth-child(6) {
+  width: 5rem;
+  padding-left: 2rem;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.delete_button {
+  float: right;
+}
+
+.trash,
+.edit,
+.good,
+.close {
+  padding: 0.4rem;
+  color: black;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.trash {
+  color: rgb(165, 42, 42);
+  &:hover {
+    background-color: rgba(165, 42, 42, 0.106);
+  }
+}
+
+.edit {
+  color: #2195f3c3;
+
+  &:hover {
+    background-color: #2195f313;
+  }
+}
+
+.good {
+  color: rgb(6, 164, 6);
+
+  &:hover {
+    background-color: rgba(6, 164, 6, 0.081);
+  }
+}
+
+.close {
+  color: red;
+
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.087);
+  }
+}
+
+td > input {
+  border: none;
+  outline: none;
+  color: black;
+  font-size: 0.9rem;
+  padding: 0;
+  width: 100%;
+}
+
+.custom-checkbox {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  left: 8px;
+  height: 0.8rem;
+  width: 0.8rem;
+  border-radius: 2px;
+  background-color: white;
+  border: 1px solid rgba(128, 128, 128, 0.558);
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #2196f3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 3px;
+  top: 3px;
+  width: 4px;
+  height: 5px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
